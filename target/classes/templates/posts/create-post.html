@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"><!-- importamos la url de thymeleaf -->
+    <head>
+        <title>Crear Posteo</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--BOOTSTRAP CSS-->
+        <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"><!--spring started web define la carpeta static como la ruta para colocar hojas de estilo,archivos css y img-->
+
+    </head>
+    <body>
+
+        <!--hacemos la incrustacion de codigo del header,ya que se va a encontrar en todas las paginas-->
+        <div th:include="posts/layout.html::header-app"></div>
+
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Crear nuevo Post </h3>
+                                <label for="title" class="form-label">Título</label>
+                                <input type="text" class="form-control" id="title" name="title" autocomplete="off">
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/post/create}" method="post">
+                                    <div class="mb-3">
+                                    <label for="content" class="form-label">Contenido</label>
+                                    <textarea class="form-control" id="content" name="content" rows="20" autocomplete="off"></textarea>
+                                </div>
+                                <div class="text-end">
+                                    <a class="btn btn-danger" href="">Cancelar</a>
+                                    <button type="submit" class="btn btn-secundary">Publicar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--BOOTSTRAP JS-->
+        <script th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    </body>
+</html>
