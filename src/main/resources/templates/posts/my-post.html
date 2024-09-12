@@ -7,12 +7,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--BOOTSTRAP CSS-->
         <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <style>
+            body{
+                background-color: #31363F;
+            }
+            h1{
+                color: white;
+                text-align: center;
+                padding-bottom: 20px;
+            }
+        </style>
     </head>
     <body>
         <div th:include="posts/layout.html::header-app"></div>
 
         <div class="container mt-4">
-            <h1>Published Publications</h1>
+            <h1>Posteos Publicados</h1>
             <div th:each="post : ${posts}" class="card mb-3">
                 <div class="card-body">
                     <h3 class="card-title" th:text="${post.title}"></h3>

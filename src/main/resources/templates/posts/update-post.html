@@ -7,6 +7,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--BOOTSTRAP CSS-->
         <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <style>
+            body{
+                background-color: #31363F;
+            }
+                        .btn-cancelar{
+                background-color: #bf4343;
+                margin-right: 20px;
+
+            }
+            .btn-cancelar:hover{
+                background-color: #a01313;
+                color:#EEEEEE;
+
+            }
+            .btn-actualizar{
+                background-color: #76ABAE;
+            }
+            .btn-actualizar:hover{
+                background-color: #5b8183;
+                color: #EEEEEE;
+            }
+        </style>
     </head>
 </head>
 <body>
@@ -17,23 +39,23 @@
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card">
-        <div class="card-header">
-          <h3>Edit Post</h3>
+        <div class="card-header text-center">
+          <h3>Editar Post</h3>
         </div>
         <div class="card-body">
           <form th:action="@{/post/update}" method="post">
             <input type="hidden" name="idPost" th:value="${post.id}">
             <div class="mb-3">
-              <label for="title" class="form-label">Title</label>
+              <label for="title" class="form-label">Título</label>
               <input type="text" class="form-control" id="title" name="title" th:value="${post.title}">
             </div>
             <div class="mb-3">
-              <label for="content" class="form-label">Content</label>
+              <label for="content" class="form-label">Contenido</label>
               <textarea class="form-control" id="content" name="content" rows="20" th:text="${post.content}"></textarea>
             </div>
-            <div class="text-end">
-              <a class="btn btn-danger" th:href="@{/post/mine}">Cancel</a>
-              <button type="submit" class="btn btn-secondary">Update</button>
+            <div class="text-center">
+              <a class="btn btn-cancelar" th:href="@{/post/mine}">Cancelar</a>
+              <button type="submit" class="btn btn-actualizar">Actualizar</button>
             </div>
           </form>
         </div>

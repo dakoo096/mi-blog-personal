@@ -4,6 +4,11 @@
         <title>Layout</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            header div{
+                background-color: #222831;
+            }
+        </style>
     </head>
     <body>
         <div th:fragment="header-app"><!--el nombre header-app va a ser el nombre con el cual pobremos incrustar este codigo-->
@@ -25,7 +30,6 @@
                                         <span th:text="${user.username}"></span><!--traemos el nombre de usuario de la sesion activa configurado en el paquete config -->
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="#">Perfil</a></li>
                                         <li><a class="dropdown-item" th:href="@{/logout}">Cerrar sesión</a></li>
                                     </ul>
                                 </div>

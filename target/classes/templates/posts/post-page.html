@@ -2,20 +2,38 @@
 
 <html lang="en" xmlns:th="http://www.thymeleaf.org"><!-- importamos la url de thymeleaf -->
     <head>
-        <title>TODO supply a title</title>
+        <title>Publicación</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--BOOTSTRAP CSS-->
         <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <style>
+            body{
+                background-color: #31363F;
+            }
+            .card{
+                background-color: #EEEEEE;
+            }
+            .card-header p{
+                display: inline;
+            }
+            .texto-comentarios{
+                background-color: #76ABAE;
+                margin-top: 50px;
+                color:white;
+            }
+        </style>
     </head>
     <body>
         <div th:include="posts/layout.html::header-app"></div>
         <div class="container mt-5">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title" th:text="${post.title}"></h5>
-                    <strong><p class="text-danger" th:text="${post.user.username}"></p></strong>
-                    <span th:text="${post.createdAt}"></span>
+                    <h3 class="card-title text-center" th:text="${post.title}"></h3>
+                    
+                    <strong><p>Realizado por: </p><p class="text-danger" th:text="${post.user.username}"></p></strong>
+                    <br>
+                    <p>Fecha de publicación: </p><span th:text="${post.createdAt}"></span>
                 </div>
                 <div class="card-body">
                     <p class="card-text" th:text="${post.content}"></p>
@@ -24,6 +42,7 @@
                 <!-- comment -->
                 <div th:if="${not #lists.isEmpty(comments)}"> <!-- si la lista es null no va a renderizar todo el resto del codigo -->
                     <ul class="list-group list-group-flush">
+                        <p class="text-center texto-comentarios">Comentarios:</p>
                         <li th:each="comment : ${comments}"class="list-group-item"><!--<!-- creamos un bucle for each para traer todos los comentarios -->
                             <div class="d-flex justify-content-between">
                                 <h6 class="mb-0 text-primary" th:text="${comment.user.name}"></h6>
@@ -46,11 +65,11 @@
                     <form th:action="@{/comment/addComment}" method="post">
                         <div class="mb-3">
                             <input type="hidden" name="postId" th:value="${post.id}"/>
-                            <label for="content" class="form-label">Add a comment:</label>
+                            <label for="content" class="form-label">Agregar un comentario:</label>
                             <textarea class="form-control" id="content" name="content" rows="3" autocomplete="off"></textarea>
                         </div>
-                        <div class="text-card">
-                            <button type="submit" class="btn btn-secondary">Comment</button>
+                        <div class="text-card text-center">
+                            <button type="submit" class="btn btn-secondary">Comentar</button>
                         </div>
                     </form>
                 </div>

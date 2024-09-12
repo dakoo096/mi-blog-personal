@@ -64,12 +64,11 @@ public class CommentController {
         return "redirect:/post/postPage/" + commentDB.getPost().getId();
     }
     //cancelar
-        @PostMapping("/cancel/{id}")
-    public String cancelEditComment(@PathVariable Long id){
+    @GetMapping("/cancel/{id}")
+    public String cancelEditComment(@PathVariable Long id) {
         CommentEntity comment = commentService.getCommentById(id).orElseThrow(() -> new IllegalArgumentException("¡Invalid comment id!"));
         return "redirect:/post/postPage/" + comment.getPost().getId();
     }
-    
     //borrar
     @GetMapping("delete/{id}")
     public String editComment(@PathVariable Long id){

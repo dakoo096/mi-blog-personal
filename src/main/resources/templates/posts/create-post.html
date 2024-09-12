@@ -6,7 +6,37 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--BOOTSTRAP CSS-->
         <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"><!--spring started web define la carpeta static como la ruta para colocar hojas de estilo,archivos css y img-->
+        <style>
+            body{
+                background-color: #31363F;
+            }
+            .card{
+                background-color: #EEEEEE;
+            }
+            .card-header{
+                text-align: center;
+            }
+            
 
+            .btn-cancelar{
+                background-color: #bf4343;
+                margin-right: 20px;
+
+            }
+            .btn-cancelar:hover{
+                background-color: #a01313;
+                color:#EEEEEE;
+
+            }
+            .btn-publicar{
+                background-color: #76ABAE;
+            }
+            .btn-publicar:hover{
+                background-color: #5b8183;
+                color: #EEEEEE;
+            }
+
+        </style>
     </head>
     <body>
 
@@ -19,21 +49,21 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header">
-                            <h3>Create New Post</h3>
+                            <h3>Crear nueva publicación</h3>
                         </div>
                         <div class="card-body">
                             <form th:action="@{/post/create}" method="post">
                                 <div class="mb-3">
-                                    <label for="title" class="form-label">Title</label>
+                                    <label for="title" class="form-label">Título</label>
                                     <input type="text" class="form-control" id="title" name="title" autocomplete="off">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="content" class="form-label">Content</label>
+                                    <label for="content" class="form-label">Contenido</label>
                                     <textarea class="form-control" id="content" name="content" rows="20" autocomplete="off"></textarea>
                                 </div>
-                                <div class="text-end">
-                                    <a class="btn btn-danger" th:href="@{/post/home}">Cancel</a>
-                                    <button type="submit" class="btn btn-secondary">Publish</button>
+                                <div class="text-center ">
+                                    <a class="btn btn-cancelar" th:href="@{/post/home}">Cancelar</a>
+                                    <button type="submit" class="btn btn-publicar">Publicar</button>
                                 </div>
                             </form>
                         </div>
