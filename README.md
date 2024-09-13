@@ -66,3 +66,12 @@ El objetivo es ofrecer una plataforma donde los usuarios puedan crear, editar y 
    ```bash
    mvn spring-boot:run
    ```
+
+   
+![blog-1](https://github.com/user-attachments/assets/5999f7c3-f384-4367-84ca-8d692f06e01e)
+![blog-2](https://github.com/user-attachments/assets/c03d3abb-c8f2-46d0-ae21-c1bc984db085)
+![blog-3](https://github.com/user-attachments/assets/2ed51d40-b4e4-4baf-882d-f7eb27b294a8)
+![blog-4](https://github.com/user-attachments/assets/a1a1d345-88e7-40ad-a918-e8baae16110e)
+![blog-5](https://github.com/user-attachments/assets/83a9d454-6f3d-4c82-8f55-0b089f11ab53)
+![blog-6](https://github.com/user-attachments/assets/d74f50b0-ab50-4e8d-a9a2-c58cbc58664f)
+![blog-7](https://github.com/user-attachments/assets/492b2887-87c1-4c2f-819a-88b8e96a6897)
