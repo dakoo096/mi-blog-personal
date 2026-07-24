@@ -38,15 +38,18 @@ public class PostEntity {
     
     //relaciones entre entidades
     
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"password", "posts", "comments"})
     @ManyToOne( //muchos post pueden pertenecer a un usuario
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @JoinColumn(name = "user_id")
-            private UserEntity user;
+    private UserEntity user;
     
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"post"})
     @OneToMany( //un post pueden tener muchos comentarios
             mappedBy = "post",
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
     )
     private List<CommentEntity> comments = new ArrayList<>();
 }

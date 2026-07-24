@@ -22,16 +22,12 @@ public class UserInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //creamos una var de tipo httpsession y solicitamos la sesion en tipo falso.
         HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("user_session_id") != null) {//si la session no es null y si nuestro atributo de session no es null
-            Long userId = Long.parseLong(session.getAttribute("user_session_id").toString()); //podemos continuar con el proceso para interceptar nuestras solicitudes// debemos realizar un parseo de long de string a long para guardarlo en una variable de tipo long
-            Optional<UserEntity> optionalUser = userService.getUserById(userId);//le pasamos nuestro id de nuestro atributo de session.
-            if (optionalUser.isPresent()) {////si optionalUser esta presente,voy a poder contianuar con la aplicacion
-                request.setAttribute("user", optionalUser.get());//seteamos la clave para nuestro objeto,y el objeto que pasamos en optionalUser.get() ..// establecemos el objeto a los atributos de solicitud con la clave user
-
-            } else {
-                return false;
+        if (session != null && session.getAttribute("user_session_id") != null) {
+            Long userId = Long.parseLong(session.getAttribute("user_session_id").toString());
+            Optional<UserEntity> optionalUser = userService.getUserById(userId);
+            if (optionalUser.isPresent()) {
+                request.setAttribute("user", optionalUser.get());
             }
-
         }
         return true;
     }

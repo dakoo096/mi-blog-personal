@@ -1,27 +1,30 @@
-
-package com.proyectoblog.my_personal_blog.Controller;
+package com.proyectoblog.my_personal_blog.controller;
 
 import com.proyectoblog.my_personal_blog.entity.CommentEntity;
 import com.proyectoblog.my_personal_blog.entity.PostEntity;
 import com.proyectoblog.my_personal_blog.entity.UserEntity;
 import com.proyectoblog.my_personal_blog.service.CommentService;
+import com.proyectoblog.my_personal_blog.service.NotificationService;
 import com.proyectoblog.my_personal_blog.service.PostService;
 import com.proyectoblog.my_personal_blog.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/comment")
+@RestController
+@RequestMapping("/api/comments")
 public class CommentController {
-    
     
     @Autowired
     private CommentService commentService;
@@ -32,50 +35,66 @@ public class CommentController {
     @Autowired
     private UserService userService;
     
+    @Autowired
+    private NotificationService notificationService;
     
-    @PostMapping("/addComment")
-    public String addComment(@RequestParam("postId") Long postId,CommentEntity comment,HttpSession session){
+    @PostMapping
+    public ResponseEntity<?> addComment(@RequestBody Map<String, Object> payload, HttpSession session) {
+        Object userIdObj = session.getAttribute("user_session_id");
+        if (userIdObj == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "No autenticado"));
+        }
+        if (!payload.containsKey("postId") || !payload.containsKey("content")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "postId y content son requeridos"));
+        }
+        Long userId = Long.parseLong(userIdObj.toString());
+        Long postId = Long.parseLong(payload.get("postId").toString());
+        String content = (String) payload.get("content");
+
+        UserEntity user = userService.getUserById(userId).orElseThrow(() -> new IllegalArgumentException("¡Usuario no encontrado!"));
+        PostEntity post = postService.getPostById(postId).orElseThrow(() -> new IllegalArgumentException("¡Post no encontrado!"));
         
-        UserEntity user = userService.getUserById(Long.parseLong(session.getAttribute("user_session_id").toString())).get();
-        PostEntity post = postService.getPostById(postId).orElseThrow(() -> new IllegalArgumentException("¡Invalid post id!"));
-        
+        CommentEntity comment = new CommentEntity();
+        comment.setContent(content);
         comment.setCreatedAt(LocalDateTime.now());
         comment.setUser(user);
         comment.setPost(post);
         
         commentService.createComment(comment);
-        return "redirect:/post/postPage/"+ postId;
-    
-    
+        
+        // Procesar notificaciones para el dueño del post y usuarios mencionados con @
+        notificationService.processCommentNotifications(user, post, content);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
- //mapear la vista
-    @GetMapping("/edit/{id}")
-    public String editComment(@PathVariable Long id,Model model){
-        CommentEntity comment = commentService.getCommentById(id).orElseThrow(() -> new IllegalArgumentException("¡ Invalid comment id!"));
-        model.addAttribute("comment",comment);
-        return "/posts/update-comment";
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCommentById(@PathVariable Long id) {
+        CommentEntity comment = commentService.getCommentById(id)
+            .orElseThrow(() -> new IllegalArgumentException("¡Comentario no encontrado!"));
+        return ResponseEntity.ok(comment);
     }
-    
-    //editar
-    @PostMapping("/update")
-    public String updateComment(@RequestParam("commentId") Long id,CommentEntity comment){
-        CommentEntity commentDB = commentService.getCommentById(id).orElseThrow(() -> new IllegalArgumentException("¡Invalid comment id!"));
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateComment(@PathVariable Long id, @RequestBody Map<String, String> payload, HttpSession session) {
+        Object userIdObj = session.getAttribute("user_session_id");
+        if (userIdObj == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "No autenticado"));
+        }
+        String content = payload.get("content");
+        CommentEntity comment = new CommentEntity();
+        comment.setContent(content);
         commentService.updateComment(id, comment);
-        return "redirect:/post/postPage/" + commentDB.getPost().getId();
+        return ResponseEntity.ok(Map.of("message", "Comentario actualizado correctamente"));
     }
-    //cancelar
-    @GetMapping("/cancel/{id}")
-    public String cancelEditComment(@PathVariable Long id) {
-        CommentEntity comment = commentService.getCommentById(id).orElseThrow(() -> new IllegalArgumentException("¡Invalid comment id!"));
-        return "redirect:/post/postPage/" + comment.getPost().getId();
-    }
-    //borrar
-    @GetMapping("delete/{id}")
-    public String editComment(@PathVariable Long id){
-        CommentEntity comment = commentService.getCommentById(id).orElseThrow(() -> new IllegalArgumentException("¡Invalid comment id!"));
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long id, HttpSession session) {
+        Object userIdObj = session.getAttribute("user_session_id");
+        if (userIdObj == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "No autenticado"));
+        }
         commentService.deleteComment(id);
-        return "redirect:/post/postPage/" + comment.getPost().getId();
+        return ResponseEntity.ok(Map.of("message", "Comentario eliminado correctamente"));
     }
-
-
 }

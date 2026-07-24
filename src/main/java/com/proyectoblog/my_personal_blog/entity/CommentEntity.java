@@ -31,12 +31,14 @@ public class CommentEntity {
     private LocalDateTime createdAt;
 
     //relaciones entre entidades
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"password", "posts", "comments"})
     @ManyToOne( //muchos comentarios pueden pertenecer a un usuario
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"comments", "user"})
     @ManyToOne( //muchos comentarios pueden pertenecer a un unico post
             fetch = FetchType.LAZY
     )

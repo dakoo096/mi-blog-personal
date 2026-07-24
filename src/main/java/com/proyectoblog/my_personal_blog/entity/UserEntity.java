@@ -28,15 +28,19 @@ public class UserEntity {
     private String name;
     private String email;
     private String username;
+    
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     //relaciones entre entidades
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(//un usuario puede realizar muchos post
             mappedBy = "user",
             cascade = CascadeType.ALL
     )
     private List<PostEntity> posts = new ArrayList<>();
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(//un usuario puede realizar muchos comentarios
             mappedBy = "user",
             cascade = CascadeType.ALL
